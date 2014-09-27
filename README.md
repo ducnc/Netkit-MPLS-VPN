@@ -138,10 +138,34 @@ Thực hiện các lệnh sau:
 
     apt-get install git -y
     git clone https://github.com/ducnc/Netkit-MPLS-VPN.git
+    cd Netkit-MPLS-VPN/
+    lstart
+
+Lúc này Xming sẽ bật lên các cửa sổ tương ứng với mỗi router như hình sau:
+<img src=http://i.imgur.com/gdSdPJR.png>
+
+Kiểm tra sự hoạt động của VPN1. 
+
+Từ A1 ta ping đến địa chỉ 192.168.30.30 (A3)
+
+Trên A3 và A4 ta sử dụng lệnh tcpdump để theo dõi
+
+<img src=http://i.imgur.com/OwcQlLZ.png>
+
+Ta thấy trên A1 ping đến địa chỉ 192.168.30.30 thành công và trên A3 bắt được những gói ICMP này, A4 thì không bắt được gì cả.
+Chứng tỏ VPN đã thực hiện đúng mặc dù bị trùng địa chỉ IP.
+
+Nếu ta trên A2 ping 192.168.30.30 thì trên A4 cũng sẽ bắt được những gói tin này, còn A3 thì không.
+Chứng tỏ hai VPN đều thực hiện đúng.
+
+##### Lưu ý:
+
+Để có thể quan sát dễ dàng hơn các gói tin được truyền qua các card mạng trên mỗi router ta thực hiện lệnh sau (ví dụ ở đây là router E1 card eth1)
+
+    tcpdump -i eth1 -w /hosthome/E1-eth1.pcap
+
+Lúc này tại thư mục /root/ của máy ảo Ubuntu sẽ có một file E1-eth1.pcap. Ta có thể copy file này ra máy thật và sử dụng wireshark để quan sát các gói tin
     
-
-
-
 ## 3. Lời cảm ơn
 
 Cảm ơn các bạn đã đọc hết bài viết này và xin ghi nhận mọi ý kiến đóng góp
