@@ -1,0 +1,29 @@
+ifconfig eth1 10.0.6.4/24 up
+ifconfig eth2 172.16.20.4/24 up
+
+modprobe mpls4
+modprobe mplsbr
+modprobe mpls_tunnel
+#ifconfig eth0 10.0.2.2 netmask 255.255.255.0 up
+#ifconfig eth1 172.16.10.2 netmask 255.255.255.0 up
+
+echo 'A2->A4 VPN1'
+#add labels 1000 and 200
+key1=`mpls nhlfe add key 0 instructions push gen 1000 nexthop eth1 ipv4 10.0.6.3|grep key |cut -c 17-26`
+key2=`mpls nhlfe add key 0 instructions push gen 200 forward $key1|grep key|cut -c 17-26`
+ip route add 172.16.40.0/24 via 10.0.6.3 table 2 mpls $key2
+ip route add 192.168.30.0/24 via 10.0.6.3 table 2 mpls $key2
+
+echo 'A4->A2 VPN1'
+#for the return path remove the labels and populatethe routing tables
+mpls labelspace set dev eth1 labelspace 0
+mpls ilm add label gen 5001 labelspace 0
+mpls ilm add label gen 200 labelspace 0
+
+ip rule add from 172.16.40.0/24 table 2
+ip rule add from 192.168.30.0/24 table 2
+ip rule add from 172.16.20.0/24 table 2
+ip rule add from 192.168.10.0/24 table 2
+ip route add 172.16.20.0/24 dev eth2 table 2
+ip route add 10.0.6.0/24 dev eth1 table 2
+ip route add 192.168.10.0/24 dev eth2 via 172.16.20.20 table 2

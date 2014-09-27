@@ -1,0 +1,31 @@
+ifconfig eth0 10.0.2.3/24 up
+ifconfig eth1 10.0.6.3/24 up
+ifconfig eth2 10.0.5.3/24 up
+
+modprobe mpls4
+modprobe mplsbr
+modprobe mpls_tunnel
+
+#********** MPLS TRAFFIC FROM A1 TO A3 ******************
+mpls labelspace set dev eth0 labelspace 0
+mpls ilm add label gen 1000 labelspace 0
+mpls nhlfe add key 0 instructions push gen 3000 nexthop eth2 ipv4 10.0.5.1
+mpls xc add ilm_label gen 1000 ilm_labelspace 0 nhlfe_key 0x2
+
+#********** MPLS TRAFFIC FROM A2 TO A4 ******************
+mpls labelspace set dev eth1 labelspace 0
+mpls ilm add label gen 1000 labelspace 0
+mpls nhlfe add key 0 instructions push gen 3000 nexthop eth2 ipv4 10.0.5.1
+mpls xc add ilm_label gen 1000 ilm_labelspace 0 nhlfe_key 0x3
+
+#********** MPLS TRAFFIC BACK FROM A3 TO A1 ******************
+mpls labelspace set dev eth2 labelspace 0
+mpls ilm add label gen 4000 labelspace 0
+mpls nhlfe add key 0 instructions push gen 4001 nexthop eth0 ipv4 10.0.2.2
+mpls xc add ilm_label gen 4000 ilm_labelspace 0 nhlfe_key 0x4
+
+#********** MPLS TRAFFIC BACK FROM A4 TO A2 ******************
+mpls labelspace set dev eth2 labelspace 0
+mpls ilm add label gen 5000 labelspace 0
+mpls nhlfe add key 0 instructions push gen 5001 nexthop eth1 ipv4 10.0.6.4
+mpls xc add ilm_label gen 5000 ilm_labelspace 0 nhlfe_key 0x5

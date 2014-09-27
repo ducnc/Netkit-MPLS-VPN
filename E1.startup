@@ -1,0 +1,59 @@
+#ifconfig eth0 172.16.40.1/24 up
+#ifconfig eth1 172.16.30.1/24 up
+#ifconfig eth3 10.0.5.1/24 up
+
+modprobe mpls4
+modprobe mplsbr
+modprobe mpls_tunnel
+ifconfig eth0 172.16.40.1 netmask 255.255.255.0 up
+ifconfig eth1 172.16.30.1 netmask 255.255.255.0 up
+ifconfig eth3 10.0.5.1 netmask 255.255.255.0 up
+
+#pop label 3000 from E3 incoming packets
+mpls labelspace set dev eth3 labelspace 0
+mpls ilm add label gen 3000 labelspace 0
+
+#consult various routing tables if packets come from a specific destination
+ip rule add from 172.16.10.0/24 table 1
+ip rule add from 172.16.30.0/24 table 1
+ip rule add from 172.16.20.0/24 table 2
+ip rule add from 172.16.40.0/24 table 2
+ip rule add from 192.168.30.0/24 dev eth1 table 1
+ip rule add from 192.168.30.0/24 dev eth0 table 2
+ip rule add from 192.168.10.0/24 table 2
+ip rule add from 192.168.10.0/24 table 1
+
+echo "A1->A3 in VPN1"
+#pop label 100 and send the packet directly to A3 (no routing is done)
+mpls ilm add label gen 100 labelspace 0
+key1=`mpls nhlfe add key 0 instructions nexthop eth1 ipv4 172.16.30.30| grep key| cut -c 17-26`
+mpls xc add ilm_label gen 100 ilm_labelspace 0 nhlfe_key $key1
+
+echo "A3->A1 in VPN1"
+#add label 4000 and 100 for packets going to A1
+var1=`mpls nhlfe add key 0 instructions push gen 4000 nexthop eth3 ipv4 10.0.5.3|grep key | cut -c 17-26`
+var2=`mpls nhlfe add key 0 instructions push gen 100 forward $var1 |grep key |cut -c 17-26`
+#map a FEC to a NHLFE
+ip route add 172.16.10.0/24 via 10.0.5.3 table 1 mpls $var2
+ip route add 192.168.10.0/24 via 10.0.5.3 table 1 mpls $var2
+
+echo "A2->A4 in VPN2"
+#pop label 200 and send the packet directly to A4 (no routing is done) 
+mpls ilm add label gen 200 labelspace 0
+key2=`mpls nhlfe add key 0 instructions nexthop eth0 ipv4 172.16.40.40| grep key| cut -c 17-26`
+mpls xc add ilm_label gen 200 ilm_labelspace 0 nhlfe_key $key2
+
+echo "A4->A2 in VPN2"
+#add labels 5000 and 200 for packets going to A2
+var1=`mpls nhlfe add key 0 instructions push gen 5000 nexthop eth3 ipv4 10.0.5.3|grep key | cut -c 17-26`
+var2=`mpls nhlfe add key 0 instructions push gen 200 forward $var1 |grep key |cut -c 17-26`
+ip route add 172.16.20.0/24 via 10.0.5.3 table 2 mpls $var2
+ip route add 192.168.10.0/24 via 10.0.5.3 table 2 mpls $var2
+
+#populate routing tables
+ip route add 172.16.30.0/24 dev eth1 table 1
+ip route add 192.168.30.0/24 dev eth1 via 172.16.30.30 table 1
+ip route add 10.0.5.0/24 dev eth3 table 1
+ip route add 172.16.40.0/24 dev eth0 table 2
+ip route add 192.168.30.0/24 dev eth0 via 172.16.40.40 table 2
+ip route add 10.0.5.0/24 dev eth3 table 2
