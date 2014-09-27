@@ -1,5 +1,19 @@
 Netkit lab MPLS VPN
 ======
+
+- [Mục lục](#user-content-netkit-lab-mpls-vpn)
+	- [1. Giới thệu bộ công cụ Netkit](#user-content-1-gi%E1%BB%9Bi-th%E1%BB%87u-b%E1%BB%99-c%C3%B4ng-c%E1%BB%A5-netkit)
+	    - [1.1. Khái niệm](#user-content-11-kh%C3%A1i-ni%E1%BB%87m)
+		- [1.2. Đặc điểm](#user-content-12-%C4%90%E1%BA%B7c-%C4%91i%E1%BB%83m)
+		- [1.3. Các thành phần](#user-content-13-c%C3%A1c-th%C3%A0nh-ph%E1%BA%A7n)
+		- [1.4. Cài đặt](#user-content-14-c%C3%A0i-%C4%91%E1%BA%B7t)
+	- [2. Bài lab MPLS VPN với netkit](#user-content-2-b%C3%A0i-lab-mpls-vpn-v%E1%BB%9Bi-netkit)
+		- [2.1.Mô hình triển khai](#user-content-21m%C3%B4-h%C3%ACnh-tri%E1%BB%83n-khai)
+		- [2.2. Một số khái niệm liên quan](#user-content-22-m%E1%BB%99t-s%E1%BB%91-kh%C3%A1i-ni%E1%BB%87m-li%C3%AAn-quan)
+		- [2.3. Phân tích quá trình kết nối trao đổi thông tin](#user-content-23-ph%C3%A2n-t%C3%ADch-qu%C3%A1-tr%C3%ACnh-k%E1%BA%BFt-n%E1%BB%91i-trao-%C4%91%E1%BB%95i-th%C3%B4ng-tin)
+		- [2.4. Thực hiện bài lab](#user-content-24-th%E1%BB%B1c-hi%E1%BB%87n-b%C3%A0i-lab)
+	- [3. Lời cảm ơn](#user-content-3-l%E1%BB%9Di-c%E1%BA%A3m-%C6%A1n)
+
 Chắc hẳn những ai đọc bài viết này của tôi cũng đã dùng qua Packet tracer hoặc GNS3. Hôm nay tôi xin giới thiệu đến các bạn một công cụ khác đó là Netkit.
 
 Mục đích của bài viết sẽ là giới thiệu cho các bạn bộ công cụ này, và thông qua một bài lab MPLS VPN sẽ hướng dẫn cho các bạn một phần nào đó cách thực hiện một bài Lab về mạng bằng Netkit.
