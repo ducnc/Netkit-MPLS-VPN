@@ -86,7 +86,7 @@ Trong phần tiếp theo tôi sẽ trình bày về một bài lab sử dụng n
 
 ## 2. Bài lab MPLS VPN với netkit
 
-##### Mô hình triển khai
+#### 2.1.Mô hình triển khai
 
 <img src=http://i.imgur.com/3oP4aOd.png>
 
@@ -95,7 +95,7 @@ Trong demo này tôi xây dựng hai VPN có địa chỉ giống nhau
 - VPN 2 (VPN màu xanh lá) nối hai mạng 192.168.10.0/24 và 192.168.30.0/24 thông qua tuyến đường tuyến đường A2 – E4 – E3 – E1 – A4
 - Các router có nhiệm vụ định tuyến cho gói tin trong cùng VPN đến đúng địa chỉ mặc dù các mạng có địa chỉ giống nhau.
 
-##### Một số khái niệm liên quan
+#### 2.2. Một số khái niệm liên quan
 
 - CE Router (Customer Edge Router): Router của khách hàng có nhiệm vụ định tuyến trong nội bộ doanh nghiệp và định tuyến ra mạng của ISP.
 - PE Router (Provider Edge Router): Router biên của nhà cung cấp, kết nối trực tiếp với khách hàng, có nhiệm vụ gắn nhãn và bóc nhãn cho các kết nối VPN của khách hàng, định tuyến tới các Router khác trong mạng ISP
@@ -104,7 +104,7 @@ Trong demo này tôi xây dựng hai VPN có địa chỉ giống nhau
 - ILM (Incoming Label Map): nối nhãn từ gói tin chuyển đến với một NHLFE, có thể hiểu là cách xử lý một gói tin được chuyển tới.
 - XC (Cross Connect): nối mỗi ILM với một NHLFE, có thể hiểu rằng nó nói cho router biết cách đổi nhãn như thế nào.
 
-##### Phân tích quá trình kết nối trao đổi thông tin
+#### 2.3. Phân tích quá trình kết nối trao đổi thông tin
 
 Kết nối từ Router A1 đến Router A3 (VPN 1)
 
@@ -124,7 +124,7 @@ Kết nối từ Router A1 đến Router A3 (VPN 1)
 
 Kết nối từ A2 đến A4 (VPN 2) cũng tương tự như kết nối của VPN1. Do tại mỗi Router căn cứ vào interface nhận gói tin và địa chỉ đích rồi sau đó mỗi gói mới được gắn nhãn cho đúng với MPLS VPN nên việc trùng lặp IP của hai VPN không thành vấn đề. Việc kết nối vẫn diễn ra bình thường mặc cho địa chỉ là như thế nào.
 
-##### Thực hiện bài lab
+#### 2.4. Thực hiện bài lab
 
 Mô hình kết nối và địa chỉ của các Router
 
@@ -132,7 +132,9 @@ Mô hình kết nối và địa chỉ của các Router
 
 Mô hình này được ánh xạ vào file cấu hình lab.conf trong github
 
-Mở Xming và ssh vào máy ảo Ubuntu
+Mỗi Router sẽ có một file .startup tương ứng chứa những command dùng để cấu hình. Các bạn cần đọc các file này thật kỹ.
+
+Mở Xming và ssh vào máy ảo Ubuntu.
 
 Thực hiện các lệnh sau:
 
