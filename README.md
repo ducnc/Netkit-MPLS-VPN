@@ -71,6 +71,10 @@ Cài đặt các gói
     apt-get install -y ia32-libs  
     apt-get install -y libc6-i386
     
+Nếu là hệ điều hành Ubuntu 14.04 thì bạn cần chạy thêm lệnh này:
+
+`apt-get install -y lib32z1 lib32ncurses5 lib32bz2-1.0`
+
 Xả nén
 
     tar -xvf netkit-2.8.tar.bz2
@@ -155,6 +159,7 @@ Thực hiện các lệnh sau:
     apt-get install git -y
     git clone https://github.com/ducnc/Netkit-MPLS-VPN.git
     cd Netkit-MPLS-VPN/
+    mkdir A1 A2 A3 A4 E1 E2 E3 E4
     lstart
 
 Lúc này Xming sẽ bật lên các cửa sổ tương ứng với mỗi router như hình sau:
