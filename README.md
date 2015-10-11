@@ -71,7 +71,7 @@ Cài đặt các gói
     apt-get install -y ia32-libs  
     apt-get install -y libc6-i386
     
-Nếu là hệ điều hành Ubuntu 14.04 thì bạn cần chạy thêm lệnh này:
+Nếu bạn gặp lỗi khi cài đặt gói `ia32-libs` thì sử dụng lệnh sau để cài các gói thay thế:
 
 `apt-get install -y lib32z1 lib32ncurses5 lib32bz2-1.0`
 
